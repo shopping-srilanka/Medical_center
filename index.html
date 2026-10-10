@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12303a" id="tc">
+<meta name="description" content="Book your doctor appointment quickly, choose a time slot, and manage your visits.">
+<title>Book a Doctor</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12303a;--mut:#5d7680;--paper:#fbfdfc;--card:#fff;--line:#d7e5e2;--g:#0e8f6b;--g2:#0a6d53;--gl:#e1f5ee;--red:#d6403a;--rl:#fdeceb;--blue:#e6f1f7;--amb:#b7791f;--aml:#fdf3dc;--head:#12303a;--onhead:#fff;--onG:#fff}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:'Figtree',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+.wrap.wide{max-width:1000px}
+.wrap.pb{padding-bottom:96px}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);outline:none}
+input:focus,select:focus,textarea:focus,button:focus-visible{border-color:var(--g);box-shadow:0 0 0 3px color-mix(in srgb,var(--g) 22%,transparent)}
+textarea{resize:vertical;min-height:84px}
+label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 5px}
+.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--g);color:var(--onG)}
+.btn:hover{background:var(--g2)}
+.btn.sec{background:var(--blue);color:var(--ink)}
+.btn.red{background:var(--rl);color:var(--red)}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.pad{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.head{background:var(--head);color:var(--onhead);border-radius:0 0 22px 22px;padding:22px 18px 20px;position:relative;overflow:hidden}
+.head .in{max-width:720px;margin:0 auto;position:relative;z-index:1;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.rx{position:absolute;right:-6px;top:-30px;font-size:190px;font-weight:800;color:var(--onhead);opacity:.07;line-height:1;pointer-events:none;font-family:Georgia,serif}
+.head h1{font-size:23px;font-weight:800;letter-spacing:-.3px;cursor:default;user-select:none}
+.head p{opacity:.8;margin-top:2px;font-size:14px}
+.head a{color:inherit;font-weight:600}
+.uchip{border:0;background:rgba(255,255,255,.16);color:var(--onhead);border-radius:99px;padding:6px 12px 6px 6px;display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer;flex:0 0 auto}
+.av{width:28px;height:28px;border-radius:50%;background:var(--g);color:var(--onG);display:inline-flex;align-items:center;justify-content:center;font-weight:800}
+.av.big{width:62px;height:62px;font-size:26px}
+.banner{border-radius:12px;padding:11px 14px;margin-bottom:14px;font-weight:600}
+.banner.warn{background:var(--aml);color:#7a4f0c}
+.banner.err{background:var(--rl);color:var(--red)}
+h2{font-size:17px;font-weight:800;margin-bottom:4px}
+.sub{color:var(--mut);font-size:13.5px}
+.steps{display:flex;gap:6px;margin:16px 0 14px}
+.stp{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--mut)}
+.stp i{display:block;height:30px;line-height:30px;border-radius:99px;font-style:normal;font-size:14px;background:var(--blue);margin-bottom:3px}
+.stp.cur i{background:linear-gradient(90deg,var(--g) 50%,var(--gl) 50%);color:var(--onG);text-shadow:0 0 2px rgba(0,0,0,.25)}
+.stp.cur{color:var(--ink)}
+.stp.ok i{background:var(--g);color:var(--onG)}
+.stp.ok{cursor:pointer;color:var(--ink)}
+.docs{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));margin-top:10px}
+.doc{border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;background:var(--card);text-align:left}
+.doc b{display:block;font-size:16px}.doc span{font-size:13px;color:var(--mut)}
+.doc:hover,.doc.on{border-color:var(--g);background:var(--gl)}
+.days{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.day{border:1.5px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;background:var(--card)}
+.day b{display:block;font-size:19px}.day span{display:block;font-size:13px;color:var(--mut)}.day em{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:13px;color:var(--g2)}
+.day:hover{border-color:var(--g);background:var(--gl)}
+.day.off{opacity:.5;cursor:not-allowed;background:var(--blue)}.day.off:hover{border-color:var(--line);background:var(--blue)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;margin-top:10px}
+.slot{border:1.5px solid var(--line);border-radius:10px;padding:9px 4px;text-align:center;font-weight:700;background:var(--card);cursor:pointer}
+.slot:hover{border-color:var(--g)}
+.slot.on{background:var(--g);border-color:var(--g);color:var(--onG)}
+.slot.full{background:var(--blue);color:var(--mut);opacity:.7;text-decoration:line-through;cursor:not-allowed}
+.slot.full small{text-decoration:none}
+.slot.blk{background:var(--rl);border-color:var(--red);color:var(--red)}
+.slot small{display:block;font-size:11px;font-weight:600;opacity:.85}
+.empty{color:var(--mut);padding:14px;text-align:center;background:var(--blue);border-radius:12px;margin-top:8px}
+.tok{font-size:54px;font-weight:800;color:var(--g);line-height:1}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.tag.pending{background:var(--aml);color:var(--amb)}.tag.confirmed{background:var(--blue);color:var(--ink)}
+.tag.done{background:var(--gl);color:var(--g2)}.tag.cancelled{background:var(--rl);color:var(--red)}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:14px 0}
+.tabs button{flex:0 0 auto;border:0;background:var(--blue);padding:9px 15px;border-radius:99px;font-weight:700;cursor:pointer;color:var(--ink)}
+.tabs button.on{background:var(--head);color:var(--onhead)}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat div{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--mut)}
+.bk{border:1.5px solid var(--line);border-radius:14px;padding:13px;margin-bottom:10px;background:var(--card)}
+.bk .top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}
+.bk .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.bk a{color:var(--g2);font-weight:600;text-decoration:none}
+.kv{display:grid;grid-template-columns:100px 1fr;gap:2px 10px;font-size:14px;margin-top:6px}.kv span{color:var(--mut)}
+.sw{display:flex;align-items:center;gap:10px;cursor:pointer;margin:6px 0}
+.sw input{width:20px;height:20px;accent-color:var(--g)}
+.wk{display:grid;grid-template-columns:70px 1fr 1fr;gap:6px;align-items:center;margin-top:6px}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border:0}
+.seg{display:flex;background:var(--blue);border-radius:12px;padding:4px;gap:4px;margin-top:8px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 6px;font-weight:700;cursor:pointer;color:var(--ink)}
+.seg button.on{background:var(--g);color:var(--onG)}
+.hero{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-radius:16px;padding:18px;margin-bottom:14px;border:1.5px solid}
+.hero.ok{background:var(--gl);border-color:var(--g)}.hero.no{background:var(--rl);border-color:var(--red)}
+.hero h2{font-size:20px;margin:0}.hero p{font-size:14px;margin-top:2px}
+.ov{display:grid;grid-template-columns:1.3fr 1fr 70px;gap:4px 10px;font-size:14px;align-items:center}
+.ov .h{color:var(--mut);font-size:12.5px;font-weight:700;padding-bottom:4px;border-bottom:1.5px solid var(--line)}
+.ov .c{padding:7px 0;border-bottom:1px solid var(--line)}
+.sect{font-size:12.5px;font-weight:800;color:var(--mut);margin:18px 0 8px;letter-spacing:.2px}
+.bnav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1.5px solid var(--line);display:flex;padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));z-index:50}
+.bnav button{flex:1;border:0;background:none;padding:8px;font-weight:700;color:var(--mut);cursor:pointer;border-radius:12px}
+.bnav button.on{color:var(--g2);background:var(--gl)}
+.bnav button span{display:block;font-size:20px;line-height:1.1}
+.mini{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.mini div{flex:1;min-width:70px;background:var(--blue);border-radius:10px;padding:8px;text-align:center}.mini b{display:block;font-size:18px}.mini small{color:var(--mut);font-size:12px}
+.sum{background:var(--gl);border-radius:12px;padding:12px 14px;margin-top:8px}
+.sum div{display:flex;justify-content:space-between;gap:8px;padding:2px 0}.sum a{color:var(--g2);font-weight:700;cursor:pointer}
+#toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--head);color:var(--onhead);padding:10px 18px;border-radius:99px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;max-width:90vw}
+#toast.show{opacity:1}
+.foot{text-align:center;color:var(--mut);font-size:12.5px;padding:18px}
+
+/* professional booking look */
+.head{border-radius:0 0 26px 26px;padding:26px 18px 24px;background:linear-gradient(135deg,var(--head),color-mix(in srgb,var(--head) 70%,var(--g)))}
+.head h1{font-size:22px}.head p{font-size:13.5px;letter-spacing:.2px}
+.pad{box-shadow:0 1px 2px rgba(18,48,58,.05),0 8px 24px -12px rgba(18,48,58,.15);border-color:transparent}
+.pad h2{font-size:18px}
+.stp i{height:32px;line-height:32px;box-shadow:inset 0 0 0 1px var(--line);background:var(--card)}
+.stp.ok i{box-shadow:none}.stp.cur i{box-shadow:none}
+.doc{display:flex;flex-direction:column;gap:2px;padding:15px;transition:.15s}
+.doc:hover{transform:translateY(-1px);box-shadow:0 6px 16px -8px rgba(18,48,58,.3)}
+.doc b::before{content:'⚕';display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--gl);color:var(--g2);align-items:center;justify-content:center;margin-right:9px;font-size:15px}
+.day{padding:20px 12px}.slot{padding:11px 4px}
+.seg button small{font-size:11px}
+.seg{padding:4px}.seg button.on{box-shadow:0 2px 8px -2px rgba(0,0,0,.3)}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:12.5px;margin:14px 0}.or::before,.or::after{content:'';flex:1;height:1px;background:var(--line)}
+.tok{background:var(--gl);display:inline-block;padding:10px 22px;border-radius:14px;margin:6px 0}
+.btn{transition:.15s}.btn:active{transform:scale(.98)}
+@media(max-width:520px){.stat{grid-template-columns:repeat(2,1fr)}.ov{grid-template-columns:1.2fr 1fr 58px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== App style (Practo-like) ===== */
+body{background:color-mix(in srgb,var(--paper) 93%,var(--g))}
+.head{border-radius:0 0 30px 30px;padding:22px 18px 52px}
+.head h1{font-size:21px}.head p{font-size:13px}
+.wrap{position:relative;margin-top:-34px}
+.wrap.pb{padding-bottom:112px}
+.pad,.bk,.stat div,.hero{border:0!important;border-radius:22px;box-shadow:0 2px 12px rgba(15,40,60,.08)}
+.steps{background:var(--card);border-radius:20px;padding:12px 8px 8px;box-shadow:0 6px 20px -8px rgba(15,40,60,.25);margin-top:0}
+.stp i{width:30px;height:30px;line-height:30px;margin:0 auto 4px;border-radius:50%;background:var(--blue);box-shadow:none}
+.stp.cur i{background:var(--g);color:var(--onG);text-shadow:none}.stp.ok i{background:var(--g2)}
+.docs{grid-template-columns:1fr;gap:12px}
+.doc{display:grid;grid-template-columns:54px 1fr 22px;column-gap:14px;align-items:center;border:0;border-radius:22px;padding:16px;box-shadow:0 2px 12px rgba(15,40,60,.09)}
+.doc::before{content:'⚕';grid-row:1/3;width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--g),var(--g2));color:var(--onG);display:flex;align-items:center;justify-content:center;font-size:24px}
+.doc::after{content:'›';grid-row:1/3;grid-column:3;font-size:28px;color:var(--mut)}
+.doc b{grid-column:2;font-size:16.5px}.doc b::before{content:none!important;display:none}.doc span{grid-column:2}
+.doc:hover,.doc.on{background:var(--gl)}
+.days{gap:12px}
+.day{border:0;border-radius:22px;padding:22px 12px;box-shadow:0 2px 12px rgba(15,40,60,.09)}
+.day b{font-size:20px}.day em{display:inline-block;background:var(--gl);padding:4px 12px;border-radius:99px}
+.day.off em{background:transparent}
+.slots{grid-template-columns:repeat(3,1fr);gap:10px}
+.slot{border:0;border-radius:99px;padding:13px 4px;box-shadow:0 1px 4px rgba(15,40,60,.14)}
+.slot.on{box-shadow:0 6px 14px -4px color-mix(in srgb,var(--g) 70%,transparent)}
+.seg{background:var(--card);border-radius:20px;box-shadow:0 2px 12px rgba(15,40,60,.08);padding:5px}
+.seg button{border-radius:16px;padding:11px 6px}
+.btn{border-radius:16px;padding:14px 18px}
+input,select,textarea{border-radius:14px;padding:13px 14px}
+.bnav{position:fixed!important;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:480px;margin:0 auto;display:flex;gap:4px;background:var(--card);border-radius:26px;box-shadow:0 12px 32px -8px rgba(15,40,60,.4);padding:6px;z-index:50;border:0}
+.bnav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 6px;border-radius:20px;font-weight:700;font-size:12px;color:var(--mut);cursor:pointer}
+.bnav button span{font-size:20px;line-height:1.2}
+.bnav button.on{background:var(--gl);color:var(--g2)}
+.tok{background:var(--gl);border-radius:20px;padding:12px 26px}
+.chat{margin-top:10px;border-radius:16px;background:var(--blue);padding:10px}.cmsgs{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.cm{max-width:82%;padding:8px 12px;border-radius:16px;font-size:14px;display:flex;flex-direction:column;word-break:break-word}.cm small{font-size:10.5px;opacity:.65;margin-top:2px}
+.cm.me{align-self:flex-end;background:var(--g);color:var(--onG);border-bottom-right-radius:5px}.cm.ad{align-self:flex-start;background:var(--card);border-bottom-left-radius:5px}
+.crow{display:flex;gap:8px;margin-top:8px}.crow input{flex:1}.bdg{background:var(--red);color:#fff;border-radius:99px;font-style:normal;font-size:11px;padding:1px 7px;margin-left:4px}
+
+/* ===== Premium polish ===== */
+:root{--sh1:0 1px 2px rgba(10,30,45,.06),0 8px 28px -10px rgba(10,30,45,.18);--sh2:0 2px 4px rgba(10,30,45,.08),0 18px 40px -14px rgba(10,30,45,.3);--grad:linear-gradient(135deg,var(--g),var(--g2))}
+body{letter-spacing:.1px;-webkit-font-smoothing:antialiased;background:radial-gradient(900px 420px at 85% -80px,color-mix(in srgb,var(--g) 14%,transparent),transparent 70%),color-mix(in srgb,var(--paper) 94%,var(--g))}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#app .wrap>*{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+#app .wrap>*:nth-child(2){animation-delay:.05s}#app .wrap>*:nth-child(3){animation-delay:.1s}
+@media(prefers-reduced-motion:reduce){#app .wrap>*{animation:none}}
+.head{background:radial-gradient(500px 220px at 90% -40px,rgba(255,255,255,.22),transparent 70%),radial-gradient(380px 200px at -10% 120%,color-mix(in srgb,var(--g) 60%,transparent),transparent 70%),var(--head);padding:26px 20px 60px;box-shadow:0 18px 40px -22px rgba(10,30,45,.6)}
+.head h1{font-size:23px;font-weight:800;letter-spacing:-.5px}
+.head p{opacity:.78;letter-spacing:.2px}
+.uchip{background:rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.22)}
+.pad,.bk,.hero,.stat div{border:1px solid color-mix(in srgb,var(--line) 55%,transparent)!important;box-shadow:var(--sh1);border-radius:24px}
+.pad{padding:22px 20px}
+h2{font-size:20px;letter-spacing:-.4px;margin-bottom:6px}
+.sub{font-size:13.5px;line-height:1.5}
+label{font-size:12px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);margin:16px 0 6px}
+.steps{border:1px solid color-mix(in srgb,var(--line) 55%,transparent);box-shadow:var(--sh2);padding:14px 8px 10px;border-radius:22px}
+.stp{font-size:11.5px;letter-spacing:.3px}
+.stp i{width:32px;height:32px;line-height:32px;font-weight:800;transition:.3s}
+.stp.cur i{background:var(--grad);box-shadow:0 0 0 5px color-mix(in srgb,var(--g) 18%,transparent),0 6px 14px -4px color-mix(in srgb,var(--g) 70%,transparent)}
+.stp.ok i{background:var(--g2)}
+.doc{border:1px solid color-mix(in srgb,var(--line) 55%,transparent);box-shadow:var(--sh1);transition:transform .25s,box-shadow .25s,border-color .25s;padding:18px 16px}
+.doc:hover{transform:translateY(-3px);box-shadow:var(--sh2);border-color:color-mix(in srgb,var(--g) 40%,transparent)}
+.doc:active{transform:scale(.985)}
+.doc::before{background:var(--grad);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 18px -6px color-mix(in srgb,var(--g) 65%,transparent);border-radius:20px;width:56px;height:56px}
+.doc b{font-size:17px;letter-spacing:-.2px}
+.doc span{display:inline-block;margin-top:3px;background:var(--gl);color:var(--g2);padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;justify-self:start}
+.doc::after{content:'›';width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;color:var(--ink)}
+.day{border:1px solid color-mix(in srgb,var(--line) 55%,transparent);box-shadow:var(--sh1);transition:.25s;position:relative;overflow:hidden}
+.day::before{content:'';position:absolute;inset:0 0 auto 0;height:4px;background:var(--grad)}
+.day.off::before{background:var(--line)}
+.day:not(.off):hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.day b{font-size:21px;letter-spacing:-.4px}
+.slot{font-size:14.5px;letter-spacing:.2px;transition:.2s;border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.slot:hover:not(.full){transform:translateY(-2px);border-color:var(--g)}
+.slot.on{background:var(--grad);border-color:transparent}
+.slot.on::after{content:' ✓'}
+.seg{border:1px solid color-mix(in srgb,var(--line) 55%,transparent);box-shadow:var(--sh1)}
+.seg button{transition:.25s;line-height:1.3}
+.seg button.on{background:var(--grad);box-shadow:0 8px 18px -8px color-mix(in srgb,var(--g) 80%,transparent)}
+.btn{background:var(--grad);box-shadow:0 10px 22px -10px color-mix(in srgb,var(--g) 85%,transparent);letter-spacing:.3px;transition:transform .15s,box-shadow .25s}
+.btn:hover{box-shadow:0 14px 28px -10px color-mix(in srgb,var(--g) 90%,transparent);transform:translateY(-1px)}
+.btn:active{transform:scale(.97)}
+.btn.sec{background:var(--blue);box-shadow:none}.btn.red{background:var(--rl);box-shadow:none}
+input,select,textarea{background:color-mix(in srgb,var(--card) 70%,var(--blue));border:1.5px solid transparent;transition:.2s}
+input:focus,select:focus,textarea:focus{background:var(--card);border-color:var(--g)}
+.bnav{background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);border:1px solid rgba(255,255,255,.5);box-shadow:0 18px 40px -12px rgba(10,30,45,.45)}
+.bnav button{transition:.25s}.bnav button.on{background:var(--grad);color:var(--onG);box-shadow:0 8px 16px -8px color-mix(in srgb,var(--g) 90%,transparent)}
+.tok{background:var(--grad);color:var(--onG);font-size:50px;letter-spacing:1px;padding:14px 34px;border-radius:24px;box-shadow:0 18px 36px -16px color-mix(in srgb,var(--g) 90%,transparent)}
+.kv{padding:12px 14px;background:color-mix(in srgb,var(--blue) 55%,transparent);border-radius:16px;margin-top:12px}
+.tag{letter-spacing:.3px;text-transform:capitalize}
+.foot{opacity:.75;font-size:12.5px;padding:18px 0 4px}
+.cm.me{background:var(--grad)}
+
+/* ===== Rush UI/UX + motion upgrade v2 ===== */
+:root{
+ --motion-fast:180ms;--motion-mid:320ms;--motion-slow:620ms;
+ --ease-out:cubic-bezier(.16,1,.3,1);
+ --focus-ring:0 0 0 4px color-mix(in srgb,var(--g) 22%,transparent);
+}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{overflow-x:hidden}
+button,a,.doc,.day,.slot,.pad,.bk,.stat div,.hero,.steps,.seg,.uchip,.bnav{
+ -webkit-tap-highlight-color:transparent;
+}
+button{touch-action:manipulation}
+button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--g) 65%,white);outline-offset:3px}
+.pad,.bk,.hero,.stat div,.steps,.doc,.day,.slot,.seg,.bnav,.uchip{
+ transition:transform var(--motion-mid) var(--ease-out),box-shadow var(--motion-mid) var(--ease-out),background-color var(--motion-fast),border-color var(--motion-fast),opacity var(--motion-mid);
+}
+@keyframes pageEnter{0%{opacity:0;transform:translateY(18px) scale(.985);filter:blur(3px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes softPop{0%{opacity:0;transform:scale(.88)}70%{transform:scale(1.035)}100%{opacity:1;transform:scale(1)}}
+@keyframes glowBreathe{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--g) 0%,transparent)}50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--g) 10%,transparent)}}
+@keyframes shimmer{0%{background-position:180% 0}100%{background-position:-180% 0}}
+@keyframes checkBounce{0%{transform:scale(.7);opacity:.5}65%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+#app .wrap>*{animation:pageEnter .55s var(--ease-out) both}
+#app .wrap>*:nth-child(2){animation-delay:55ms}
+#app .wrap>*:nth-child(3){animation-delay:100ms}
+#app .wrap>*:nth-child(4){animation-delay:145ms}
+#app .wrap>*:nth-child(5){animation-delay:190ms}
+.head{isolation:isolate}
+.head:after{content:"";position:absolute;z-index:0;width:210px;height:210px;right:-80px;bottom:-135px;border:1px solid rgba(255,255,255,.18);border-radius:50%;box-shadow:0 0 0 22px rgba(255,255,255,.035),0 0 0 48px rgba(255,255,255,.025);pointer-events:none}
+.rx{animation:softPop .9s var(--ease-out) both}
+.doc:hover,.day:not(.off):hover,.bk:hover,.stat div:hover{transform:translateY(-3px)}
+.doc.on{outline:2px solid color-mix(in srgb,var(--g) 45%,transparent);outline-offset:1px}
+.doc.on::after{content:'✓';background:var(--g);color:var(--onG);font-size:17px;font-weight:900}
+.day:not(.off):active,.doc:active,.slot:active,.bnav button:active{transform:scale(.97)}
+.stp.cur i{animation:softPop .42s var(--ease-out) both}
+.stp.ok i{animation:checkBounce .36s var(--ease-out) both}
+.slot.on{animation:checkBounce .26s var(--ease-out) both}
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.18) 45%,transparent 70%);background-size:220% 100%;opacity:0;pointer-events:none}
+.btn:hover:before{opacity:1;animation:shimmer .9s linear}
+.btn:focus-visible{box-shadow:var(--focus-ring)}
+input:focus,select:focus,textarea:focus{box-shadow:var(--focus-ring)}
+input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mut) 78%,transparent)}
+label{line-height:1.35}
+.bnav button span{transition:transform var(--motion-mid) var(--ease-out)}
+.bnav button.on span{transform:translateY(-2px) scale(1.08)}
+.tok{animation:softPop .5s var(--ease-out) both}
+.banner{animation:pageEnter .4s var(--ease-out) both}
+.empty{border:1px dashed color-mix(in srgb,var(--g) 25%,var(--line));}
+.chat{animation:pageEnter .3s var(--ease-out) both}
+.cm{animation:pageEnter .22s var(--ease-out) both}
+.sum{border:1px solid color-mix(in srgb,var(--g) 14%,transparent)}
+/* Improve mobile reachability and prevent horizontal overflow */
+@media(max-width:520px){
+ .wrap{padding-left:14px;padding-right:14px}
+ .head{padding-left:18px;padding-right:18px}
+ .pad{padding:19px 16px}
+ .bnav{bottom:calc(10px + env(safe-area-inset-bottom,0px));left:10px;right:10px}
+ .bnav button{min-height:52px}
+ .slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .slot{min-width:0;font-size:13px;padding:12px 2px}
+ .row>*{min-width:0}
+ input,select,textarea{font-size:16px} /* avoids iOS zoom; harmless elsewhere */
+}
+@media(min-width:760px){
+ .wrap{padding-left:22px;padding-right:22px}
+ .docs{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(hover:none){
+ .doc:hover,.day:not(.off):hover,.bk:hover,.stat div:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+</style>
+</head>
+<body>
+<div id="app"><div class="wrap"><p class="sub">Loading…</p></div></div>
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<script src="config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* Firebase config: config.js, else one saved by the dev page, else the built-in project. */
+
+let FBERR='';
+function fbMsg(e){const c=(e&&e.code)||'',m=(e&&e.message)||String(e);
+  if(c==='permission-denied'||/insufficient permissions/i.test(m))return 'Firebase blocked this (permission denied). Publish the Firestore rules: open the developer page and use the Fix Firebase section.';
+  if(/does not exist|not-found|NOT_FOUND/i.test(c+' '+m))return 'The Firestore database is not created yet. Firebase Console > Build > Firestore Database > Create database.';
+  if(c==='unavailable'||/offline|backend|network/i.test(m))return 'Cannot reach Firebase. Check the internet connection and try again.';
+  if(c==='invalid-argument')return 'Firebase rejected the data: '+m;
+  if(c==='resource-exhausted')return 'The Firebase daily quota is used up.';
+  return 'Firebase error: '+(c?c+' - ':'')+m;
+}
+function fbErr(e){FBERR=fbMsg(e);console.error(e);try{toast(FBERR.slice(0,100))}catch(_){}try{if(S)render()}catch(_){}}
+const fbBanner=()=>FBERR?`<div class="banner err" style="margin-top:14px;display:flex;justify-content:space-between;gap:10px"><span>${esc(FBERR)}</span><button class="btn sm red" onclick="FBERR='';render()">OK</button></div>`:'';
+addEventListener('unhandledrejection',e=>e.preventDefault());
+const BAKED_CONFIG={apiKey:"AIzaSyC5KCiRWBawHCRlwVpVyD_71jyp_u0bhwk",authDomain:"medical-center-b9e5f.firebaseapp.com",projectId:"medical-center-b9e5f",storageBucket:"medical-center-b9e5f.firebasestorage.app",messagingSenderId:"485817737930",appId:"1:485817737930:web:6745c7c9354b5fde018a33",measurementId:"G-6J7GQ15RJ0"};
+const FIREBASE_CONFIG=(()=>{if(window.MCB_CONFIG)return window.MCB_CONFIG;try{const c=JSON.parse(localStorage.getItem('mcb_fbconfig'));if(c&&c.projectId)return c}catch(e){}return BAKED_CONFIG})();
+const THEMES={"mint": {"n": "Mint Pharmacy", "v": {"--ink": "#12303a", "--mut": "#5d7680", "--paper": "#fbfdfc", "--card": "#ffffff", "--line": "#d7e5e2", "--g": "#0e8f6b", "--g2": "#0a6d53", "--gl": "#e1f5ee", "--blue": "#e6f1f7", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#12303a", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "ocean": {"n": "Ocean Blue", "v": {"--ink": "#0f2a44", "--mut": "#5d7680", "--paper": "#fafcff", "--card": "#ffffff", "--line": "#d3e1f0", "--g": "#1565c0", "--g2": "#0d47a1", "--gl": "#e3f0ff", "--blue": "#e8f1fa", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#0f2a44", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "royal": {"n": "Royal Purple", "v": {"--ink": "#2a1b4d", "--mut": "#5d7680", "--paper": "#fcfbff", "--card": "#ffffff", "--line": "#e0d8f2", "--g": "#6a3fd0", "--g2": "#5129ae", "--gl": "#efe8ff", "--blue": "#f0ebfa", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#2a1b4d", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "sunset": {"n": "Sunset Orange", "v": {"--ink": "#3b2013", "--mut": "#5d7680", "--paper": "#fffdfb", "--card": "#ffffff", "--line": "#f0dccb", "--g": "#d9620f", "--g2": "#b34c08", "--gl": "#fff0e1", "--blue": "#fbefe3", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#3b2013", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "rose": {"n": "Rose Care", "v": {"--ink": "#3d1a2a", "--mut": "#5d7680", "--paper": "#fffcfd", "--card": "#ffffff", "--line": "#f1d6e1", "--g": "#d6336c", "--g2": "#b02556", "--gl": "#ffe8f0", "--blue": "#fbeaf1", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#3d1a2a", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "forest": {"n": "Forest Green", "v": {"--ink": "#14301f", "--mut": "#5d7680", "--paper": "#fbfdfb", "--card": "#ffffff", "--line": "#d3e4d7", "--g": "#2f8f46", "--g2": "#226b34", "--gl": "#e4f5e8", "--blue": "#e8f2ea", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#14301f", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "graphite": {"n": "Graphite", "v": {"--ink": "#1f2933", "--mut": "#5d7680", "--paper": "#fafbfc", "--card": "#ffffff", "--line": "#d9dfe5", "--g": "#3a4a5a", "--g2": "#27323d", "--gl": "#e8edf1", "--blue": "#eef1f4", "--red": "#d6403a", "--rl": "#fdeceb", "--amb": "#b7791f", "--aml": "#fdf3dc", "--head": "#1f2933", "--onhead": "#ffffff", "--onG": "#ffffff"}}, "midnight": {"n": "Midnight (dark)", "v": {"--ink": "#e6f2f0", "--mut": "#8fa9ae", "--paper": "#0e1a1f", "--card": "#15262d", "--line": "#27414a", "--g": "#2fc89b", "--g2": "#25a67f", "--gl": "#11332b", "--blue": "#1a3340", "--red": "#ff8a80", "--rl": "#3a1a1a", "--amb": "#f0b429", "--aml": "#3a2e10", "--head": "#0b2a33", "--onhead": "#e6f2f0", "--onG": "#06231b"}}};
+
+/* ---------- helpers ---------- */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const pYmd=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const t2m=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
+const m2t=m=>`${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const f12=t=>{let[h,m]=t.split(':').map(Number);const ap=h>=12?'PM':'AM';h=h%12||12;return `${h}:${pad(m)} ${ap}`};
+const DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DNF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const uid=()=>Math.random().toString(36).slice(2,9);
+const clone=o=>JSON.parse(JSON.stringify(o));
+const nice=ds=>{const d=pYmd(ds);return `${DN[d.getDay()]}, ${d.getDate()} ${MN[d.getMonth()]}`};
+const niceDT=ts=>{const d=new Date(ts);return `${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`};
+const todayS=()=>ymd(new Date());
+const tomS=()=>{const n=new Date();return ymd(new Date(n.getFullYear(),n.getMonth(),n.getDate()+1))};
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.className='show';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2300)}
+function normPhone(p){let d=String(p).replace(/[^\d+]/g,'');if(d.startsWith('+94'))d='0'+d.slice(3);else if(d.startsWith('94')&&d.length===11)d='0'+d.slice(2);d=d.replace(/\D/g,'');return /^\d{9,12}$/.test(d)?d:''}
+async function hashPw(id,pw){
+  const t='mcb|'+id+'|'+pw;
+  if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+  let h=5381;for(const c of t)h=((h<<5)+h+c.charCodeAt(0))|0;return 'x'+h;
+}
+function applyTheme(id,ac){
+  const t=THEMES[id]||THEMES.mint;if(!t)return;
+  const rs=document.documentElement.style;
+  for(const k in t.v)rs.setProperty(k,t.v[k]);
+  if(ac&&/^#[0-9a-f]{6}$/i.test(ac)){rs.setProperty('--g',ac);rs.setProperty('--g2',`color-mix(in srgb, ${ac} 78%, black)`);rs.setProperty('--gl',`color-mix(in srgb, ${ac} 14%, var(--card))`)}
+  const m=document.getElementById('tc');if(m)m.content=t.v['--head'];
+}
+
+/* ---------- defaults ---------- */
+function newDoctor(name,spec,id){
+  const days={};for(let i=0;i<7;i++)days[i]={on:true,start:'09:00',end:'13:00',non:true,nstart:'18:00',nend:'21:00'};
+  return{id:id||uid(),name:name||'Dr. New Doctor',spec:spec||'General Physician',active:true,slotMin:15,perSlot:1,breakOn:false,breakStart:'11:00',breakEnd:'11:30',days};
+}
+const DEF={
+  clinicName:'City Medical Center & Pharmacy',phone:'',notice:'',theme:'mint',accent:'',footer:'',maintenance:false,maintenanceMsg:'We are updating the system. Please check back soon.',allowSignup:true,
+  bookingOpen:true,closedMsg:'Booking is closed right now. Please try again later.',
+  tomorrowMode:'auto',tomorrowFrom:'17:00',
+  autoClose:{on:false,closeDay:5,closeTime:'23:00',openDay:6,openTime:'06:00'},
+  cutoffMin:15,maxPerPhone:2,password:'admin123',
+  closedDates:[],specials:[],blockedSlots:[],doctors:[newDoctor('Dr. Example','General Physician','d1')]
+};
+
+/* ---------- storage layer (Firebase or local demo) ---------- */
+function makeStore(){
+  if(FIREBASE_CONFIG&&typeof firebase!=='undefined'){
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const db=firebase.firestore();
+    try{db.settings({ignoreUndefinedProperties:true,experimentalAutoDetectLongPolling:true,merge:true})}catch(e){}
+    const sref=db.collection('meta').doc('settings'),U_=db.collection('users');
+    const wp=p=>p.catch(e=>{fbErr(e);throw e});
+    return{mode:'Firebase',
+      init(onS,onB){
+        sref.onSnapshot(s=>{if(!s.exists)sref.set(DEF).catch(fbErr);else{FBERR='';onS(s.data())}},e=>{fbErr(e);onS(clone(DEF))});
+        db.collection('bookings').onSnapshot(q=>onB(q.docs.map(d=>({...d.data(),id:d.id}))),e=>{fbErr(e);onB([])});
+      },
+      saveSettings:s=>wp(sref.set(JSON.parse(JSON.stringify(s)))),
+      addBooking:b=>wp(db.collection('bookings').add(JSON.parse(JSON.stringify(b))).then(r=>r.id)),
+      updateBooking:(id,p)=>wp(db.collection('bookings').doc(id).update(p)),
+      deleteBooking:id=>wp(db.collection('bookings').doc(id).delete()),
+      getUser:id=>wp(U_.doc(id).get().then(d=>d.exists?{...d.data(),id:d.id}:null)),
+      findByUsername:n=>wp(U_.where('usernameLower','==',n).limit(1).get().then(q=>q.empty?null:{...q.docs[0].data(),id:q.docs[0].id})),
+      saveUser:u=>wp(U_.doc(u.id).set(JSON.parse(JSON.stringify(u)))),
+      deleteUser:id=>wp(U_.doc(id).delete()),
+      onUsers:cb=>U_.onSnapshot(q=>cb(q.docs.map(d=>({...d.data(),id:d.id}))),e=>fbErr(e))};
+  }
+  const K='mcb_settings',KB='mcb_bookings',KU='mcb_users';let cbB,cbU;
+  const rs=()=>{try{return JSON.parse(localStorage.getItem(K))}catch(e){return null}};
+  const rb=()=>{try{return JSON.parse(localStorage.getItem(KB))||[]}catch(e){return[]}};
+  const ru=()=>{try{return JSON.parse(localStorage.getItem(KU))||[]}catch(e){return[]}};
+  const wb=a=>localStorage.setItem(KB,JSON.stringify(a));
+  const wu=a=>{localStorage.setItem(KU,JSON.stringify(a));cbU&&cbU(a)};
+  return{mode:'Demo (this device only)',
+    init(onS,onB){cbB=onB;onS(rs()||clone(DEF));onB(rb());addEventListener('storage',()=>{onS(rs()||clone(DEF));onB(rb())})},
+    saveSettings:s=>{localStorage.setItem(K,JSON.stringify(s));return Promise.resolve()},
+    addBooking:b=>{const id=uid(),a=rb();a.push({...b,id});wb(a);cbB(a);return Promise.resolve(id)},
+    updateBooking:(id,p)=>{const a=rb().map(x=>x.id===id?{...x,...p}:x);wb(a);cbB(a);return Promise.resolve()},
+    deleteBooking:id=>{const a=rb().filter(x=>x.id!==id);wb(a);cbB(a);return Promise.resolve()},
+    getUser:id=>Promise.resolve(ru().find(u=>u.id===id)||null),
+    findByUsername:n=>Promise.resolve(ru().find(u=>u.usernameLower===n)||null),
+    saveUser:u=>{wu([...ru().filter(x=>x.id!==u.id),u]);return Promise.resolve()},
+    deleteUser:id=>{wu(ru().filter(x=>x.id!==id));return Promise.resolve()},
+    onUsers:cb=>{cbU=cb;cb(ru())}};
+}
+const Store=makeStore();
+let S=null,B=[],USERS=[];
+let saveT;
+const saveSoon=()=>{clearTimeout(saveT);saveT=setTimeout(()=>Store.saveSettings(S),500)};
+const saveNow=()=>{clearTimeout(saveT);return Store.saveSettings(S)};
+
+/* ---------- schedule logic ---------- */
+const getDoc=id=>S.doctors.find(d=>d.id===id);
+function autoClosed(now){
+  now=now||new Date();const a=S.autoClose;if(!a||!a.on)return null;
+  const cur=now.getDay()*1440+now.getHours()*60+now.getMinutes();
+  const c=a.closeDay*1440+t2m(a.closeTime),o=a.openDay*1440+t2m(a.openTime);
+  const inside=c<=o?(cur>=c&&cur<o):(cur>=c||cur<o);
+  return inside?`Auto-closed. Reopens ${DNF[a.openDay]} ${f12(a.openTime)}`:null;
+}
+function tomorrowState(){
+  const m=S.tomorrowMode||'auto';if(m==='off')return'hide';if(m==='on')return'open';
+  const n=new Date();return n.getHours()*60+n.getMinutes()>=t2m(S.tomorrowFrom||'17:00')?'open':'wait';
+}
+function dayInfo(doc,ds){
+  if(!S.bookingOpen)return{open:false,reason:S.closedMsg};
+  const ac=autoClosed();if(ac)return{open:false,reason:ac};
+  if(!doc||!doc.active)return{open:false,reason:'Doctor not available'};
+  const cd=S.closedDates.find(c=>c.date===ds&&(c.doc==='all'||c.doc===doc.id));
+  if(cd)return{open:false,reason:cd.reason||'Closed'};
+  const w=doc.days[pYmd(ds).getDay()];let sh=[];
+  if(w){if(w.on)sh.push({k:'m',l:'Morning',start:w.start,end:w.end,gap:w.gap});if(w.non)sh.push({k:'n',l:'Night',start:w.nstart||'18:00',end:w.nend||'21:00',gap:w.ngap})}
+  S.specials.filter(c=>c.date===ds&&(c.doc==='all'||c.doc===doc.id)).forEach(sp=>{
+    if(sp.off){sh=sh.filter(y=>y.k!==sp.sh);return}
+    if(!sp.sh){sh=[{k:'m',l:'Special hours',start:sp.start,end:sp.end}];return}
+    const o={k:sp.sh,l:sp.sh==='n'?'Night':'Morning',start:sp.start,end:sp.end,gap:sp.gap},x=sh.findIndex(y=>y.k===o.k);x>=0?sh[x]=o:sh.push(o)});
+  sh.sort((a,b)=>a.k==='m'?-1:1);
+  if(sh.length)return{open:true,shifts:sh,start:sh[0].start,end:sh[sh.length-1].end};
+  return{open:false,reason:'Day off'};
+}
+function genTimes(doc,info){
+  const out=[];
+  (info.shifts||[{start:info.start,end:info.end}]).forEach(sh=>{const step=Math.max(5,+(sh.gap||doc.slotMin)||15);
+    for(let m=t2m(sh.start);m+step<=t2m(sh.end);m+=step){
+      if(doc.breakOn&&m>=t2m(doc.breakStart)&&m<t2m(doc.breakEnd))continue;
+      out.push(m2t(m));
+    }
+  });
+  return out;
+}
+const taken=(doc,ds,t)=>B.filter(b=>b.docId===doc.id&&b.date===ds&&b.time===t&&b.status!=='cancelled').length;
+function avail(doc,ds){
+  const info=dayInfo(doc,ds);if(!info.open)return[];
+  const now=new Date(),today=ymd(now),nm=now.getHours()*60+now.getMinutes();
+  return genTimes(doc,info).map(t=>{
+    if(S.blockedSlots.includes(`${ds}|${doc.id}|${t}`))return null;
+    const past=ds===today&&t2m(t)<nm+(+S.cutoffMin||0);
+    const n=taken(doc,ds,t);const sh=info.shifts.find(x=>t2m(t)>=t2m(x.start)&&t2m(t)<t2m(x.end));return{t,n,sh:sh?sh.k:'m',full:n>=doc.perSlot,past};
+  }).filter(Boolean);
+}
+const freeCount=(doc,ds)=>avail(doc,ds).filter(s=>!s.full&&!s.past).length;
+
+/* ---------- root ---------- */
+const app=document.getElementById('app');
+let authed=sessionStorage.getItem('mcb_auth')==='1';
+let U=null,uReady=false;
+const P={doc:'',date:'',time:'',name:'',phone:'',problem:'',done:null};
+const W={shift:'',step:1,view:'book',auth:'login',open:''};
+const A={tab:'bookings',date:todayS(),doc:'all',status:'all',q:'',edit:'',blkDoc:'',blkDate:todayS(),uq:'',uopen:''};
+function render(){
+  if(!S)return;
+  app.innerHTML=viewPatient();
+  
+}
+function typing(){const a=document.activeElement;return a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&app.contains(a)}
+Store.init(s=>{S={...clone(DEF),...s};applyTheme(S.theme,S.accent);if(!typing())render()},b=>{B=b;if(S&&!typing())render();else refreshChat()});
+
+
+(async()=>{const id=localStorage.getItem('mcb_sess');if(id){try{U=await Store.getUser(id)}catch(e){}if(!U)localStorage.removeItem('mcb_sess')}uReady=true;render()})();
+setInterval(()=>{if(S&&!typing())render()},15000);
+
+const bkOf=u=>B.filter(b=>b.userId===u.id);
+
+
+/* ============================================================
+   PATIENT
+   ============================================================ */
+function viewPatient(){
+  if(!uReady)return`<div class="wrap"><p class="sub">Loading…</p></div>`;
+  let h=`<div class="head"><div class="in"><div><h1 onclick="logoTap()">${esc(S.clinicName)}</h1><p>${S.phone?`Call <a href="tel:${esc(S.phone)}">${esc(S.phone)}</a>`:'Book your doctor visit'}</p></div>${U?`<button class="uchip" onclick="W.view='me';render()"><span class="av">${esc(U.username[0].toUpperCase())}</span>${esc(U.username)}</button>`:''}</div></div><div class="wrap pb">`;
+  h+=fbBanner();
+  if(S.notice)h+=`<div class="banner warn" style="margin-top:14px">${esc(S.notice)}</div>`;
+  const ac=autoClosed();
+  if(!S.bookingOpen)h+=`<div class="banner err" style="margin-top:14px">${esc(S.closedMsg)}</div>`;
+  else if(ac)h+=`<div class="banner err" style="margin-top:14px">${esc(ac)}</div>`;
+  h+=S.maintenance?`<div class="pad" style="margin-top:16px;text-align:center"><div class="tok" style="font-size:40px">🛠</div><h2 style="margin-top:8px">Under maintenance</h2><p class="sub" style="margin-top:4px">${esc(S.maintenanceMsg)}</p></div>`:!U?viewAuth():W.view==='me'?viewMe():viewBook();
+  h+=`<div class="foot">${esc(S.footer||S.clinicName)}<div style="margin-top:6px">Powered by : <a href="https://rusthicrush.github.io/Rush2" target="_blank" rel="noopener" style="color:var(--g2);font-weight:700;text-decoration:none">Rush Environment</a></div></div></div>`;
+  if(U&&!S.maintenance)h+=`<div class="bnav"><button class="${W.view==='book'?'on':''}" onclick="W.view='book';render()"><span>📅</span>Book</button><button class="${W.view==='me'?'on':''}" onclick="W.view='me';render()"><span>☺</span>Me${(()=>{const n=U.guest?0:bkOf(U).reduce((a,b)=>a+unreadU(b),0);return n?` <em class="bdg">${n}</em>`:''})()}</button></div>`;
+  return h;
+}
+let taps=0,tapT;
+function logoTap(){taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);if(taps>=5){taps=0;location.href='medical-admin.html'}}
+
+/* ----- auth ----- */
+function viewAuth(){
+  const canSu=S.allowSignup!==false,su=W.auth==='signup'&&canSu;
+  return`<div class="pad" style="margin-top:16px"><h2 style="font-size:20px">${su?'Create your account':'Welcome back'}</h2><p class="sub">${su?'Sign up once, then book in a few taps.':'Log in to book and see your visits.'}</p>
+  ${canSu?`<div class="seg"><button class="${su?'':'on'}" onclick="W.auth='login';render()">Log in</button><button class="${su?'on':''}" onclick="W.auth='signup';render()">Sign up</button></div>`:'<p class="sub" style="margin-top:8px">New sign ups are closed right now.</p>'}
+  ${su?`<label>Username</label><input id="a_u" autocomplete="username" placeholder="e.g. nimal88" autocapitalize="none">
+  <label>Phone number</label><input id="a_p" type="tel" inputmode="tel" autocomplete="tel" placeholder="07X XXX XXXX">`
+  :`<label>Username or phone number</label><input id="a_u" autocomplete="username" autocapitalize="none">`}
+  <label>Password</label><input id="a_w" type="password" autocomplete="${su?'new-password':'current-password'}" onkeydown="if(event.key==='Enter')${su?'doSignup()':'doLogin()'}">
+  <button class="btn" style="width:100%;margin-top:16px;padding:14px" onclick="${su?'doSignup()':'doLogin()'}">${su?'Create account':'Log in'}</button>
+  <div class="or"><span>or</span></div><button class="btn sec" style="width:100%;padding:13px" onclick="startGuest()">Skip &amp; continue as guest</button></div>`;
+}
+function startSession(u){U=u;localStorage.setItem('mcb_sess',u.id);W.view='book';W.step=1;P.name='';P.phone='';render();window.scrollTo(0,0)}
+async function doSignup(){
+  if(S.allowSignup===false)return toast('Sign-ups are closed');
+  const un=document.getElementById('a_u').value.trim(),ph=normPhone(document.getElementById('a_p').value),pw=document.getElementById('a_w').value;
+  if(!/^[A-Za-z0-9_.]{3,20}$/.test(un))return toast('Username: 3-20 letters, numbers, _ or .');
+  if(!ph)return toast('Enter a valid phone number');
+  if(pw.length<4)return toast('Password needs at least 4 characters');
+  try{
+    if(await Store.getUser(ph))return toast('This phone is already registered. Log in.');
+    if(await Store.findByUsername(un.toLowerCase()))return toast('Username already taken');
+    const u={id:ph,username:un,usernameLower:un.toLowerCase(),phone:ph,passHash:await hashPw(ph,pw),created:Date.now()};
+    await Store.saveUser(u);startSession(u);toast('Account created');
+  }catch(e){toast('Could not sign up. Check connection.')}
+}
+async function doLogin(){
+  const id=document.getElementById('a_u').value.trim(),pw=document.getElementById('a_w').value;
+  if(!id||!pw)return toast('Enter username/phone and password');
+  try{
+    const ph=normPhone(id);let u=null;
+    if(ph)u=await Store.getUser(ph);
+    if(!u)u=await Store.findByUsername(id.toLowerCase());
+    if(!u||u.passHash!==await hashPw(u.id,pw))return toast('Wrong username or password');
+    startSession(u);toast('Welcome '+u.username);
+  }catch(e){toast('Could not log in. Check connection.')}
+}
+function startGuest(){let g=localStorage.getItem('mcb_gid');if(!g){g='guest-'+uid();localStorage.setItem('mcb_gid',g)}U={id:g,username:'Guest',phone:'',created:Date.now(),guest:true};W.view='book';W.step=1;P.name='';P.phone='';render();window.scrollTo(0,0)}
+function logoutUser(){U=null;localStorage.removeItem('mcb_sess');W.view='book';W.auth='login';P.done=null;render();window.scrollTo(0,0)}
+
+/* ----- booking wizard ----- */
+function tomorrowStateDay(){const s=tomorrowState();return s}
+function viewBook(){
+  const docs=S.doctors.filter(d=>d.active);
+  if(P.done){
+    const b=P.done;
+    return`<div class="pad" style="margin-top:16px;text-align:center"><p class="sub">Booking received</p><div class="tok">#${b.token}</div>${U&&!U.guest?`<div><button class="btn sec" style="margin-top:12px" onclick="W.view='me';W.chat='${b.id}';render()">💬 Chat with clinic</button></div>`:''}
+    <h2 style="margin-top:8px">${esc(b.docName)}</h2><p>${nice(b.date)} · ${f12(b.time)}</p>${b.shift?`<p class="sub">${esc(b.shift)} shift</p>`:''}
+    <p class="sub" style="margin-top:8px">${esc(b.name)} · ${esc(b.phone)}</p>
+    <p class="sub" style="margin-top:10px">Please arrive 10 minutes early and show this number.</p>
+    <div class="row" style="margin-top:14px"><button class="btn" onclick="P.done=null;W.step=1;render()">Book another</button><button class="btn sec" onclick="P.done=null;W.view='me';render()">See in Me</button></div></div>`;
+  }
+  if(!docs.length)return`<div class="empty" style="margin-top:16px">No doctors are available right now.</div>`;
+  if(!docs.find(d=>d.id===P.doc)){P.doc='';P.date='';P.time='';W.step=1}
+  const doc=getDoc(P.doc);
+  if(W.step>=3&&!P.date)W.step=2;
+  if(W.step>=4&&!P.time)W.step=3;
+  if(P.time&&P.date){const c=avail(doc,P.date).find(x=>x.t===P.time);if(!c||c.full||c.past){P.time='';if(W.step>3)W.step=3}}
+  const STEPS=['Doctor','Day','Time','Details'];
+  let h=`<div class="steps">${STEPS.map((s,i)=>`<div class="stp ${W.step===i+1?'cur':''} ${W.step>i+1?'ok':''}" ${W.step>i+1?`onclick="goStep(${i+1})"`:''}><i>${W.step>i+1?'✓':i+1}</i>${s}</div>`).join('')}</div>`;
+  const back=W.step>1?`<button class="btn sec sm" style="margin-bottom:10px" onclick="goStep(${W.step-1})">‹ Back</button>`:'';
+  if(W.step===1){
+    h+=`<div class="pad"><h2>Choose your doctor</h2><div class="docs">${docs.map(d=>`<button class="doc ${d.id===P.doc?'on':''}" onclick="pickDoc('${d.id}')"><b>${esc(d.name)}</b><span>${esc(d.spec)}</span></button>`).join('')}</div></div>`;
+  }else if(W.step===2){
+    const ts=tomorrowState();
+    const cards=[{ds:todayS(),l:'Today'}];if(ts!=='hide')cards.push({ds:tomS(),l:'Tomorrow',wait:ts==='wait'});
+    h+=`<div class="pad">${back}<h2>Pick the day</h2><p class="sub">${esc(doc.name)}</p><div class="days" style="${cards.length<2?'grid-template-columns:1fr':''}">`;
+    cards.forEach(c=>{
+      const n=c.wait?0:freeCount(doc,c.ds),info=dayInfo(doc,c.ds);
+      const note=c.wait?`Opens at ${f12(S.tomorrowFrom||'17:00')}`:n?`${n} time${n>1?'s':''} left`:(info.open?'No times left':info.reason);
+      h+=`<div class="day ${n?'':'off'}" ${n?`onclick="pickDate('${c.ds}')"`:''}><b>${c.l}</b><span>${nice(c.ds)}</span><em>${esc(note)}</em></div>`;
+    });
+    h+=`</div></div>`;
+  }else if(W.step===3){
+    const all=avail(doc,P.date),inf=dayInfo(doc,P.date),shs=inf.shifts||[];
+    if(!shs.find(x=>x.k===W.shift))W.shift=(shs.find(x=>all.some(a=>a.sh===x.k&&!a.full&&!a.past))||shs[0]||{}).k||'';
+    const sl=all.filter(a=>a.sh===W.shift);
+    h+=`<div class="pad">${back}<h2>Pick a time</h2><p class="sub">${esc(doc.name)} · ${nice(P.date)}</p>
+    <div class="seg">${shs.map(x=>{const f=all.filter(a=>a.sh===x.k&&!a.full&&!a.past).length;return`<button class="${W.shift===x.k?'on':''}" onclick="W.shift='${x.k}';P.time='';render()">${x.k==='n'?'🌙':'☀'} ${x.l}<small style="display:block;font-weight:600;opacity:.8">${f12(x.start)} – ${f12(x.end)} · ${f} free</small></button>`}).join('')}</div><div class="slots">`;
+    sl.forEach(s=>{const dis=s.full||s.past;h+=`<button class="slot ${dis?'full':''} ${P.time===s.t?'on':''}" ${dis?'disabled':`onclick="pickTime('${s.t}')"`}>${f12(s.t)}${dis?`<small>${s.past?'Time out':'Booked'}</small>`:''}</button>`});
+    h+=`</div>${sl.length?'':'<div class="empty">No times available on this day.</div>'}</div>`;
+  }else{
+    if(!P.name&&!U.guest)P.name=U.username;if(!P.phone)P.phone=U.phone;
+    h+=`<div class="pad">${back}<h2>Patient details</h2>
+    <div class="sum"><div><span>Doctor</span><a onclick="goStep(1)">${esc(doc.name)}</a></div><div><span>Day</span><a onclick="goStep(2)">${nice(P.date)}</a></div><div><span>Time</span><a onclick="goStep(3)">${f12(P.time)}${W.shift==='n'?' · Night':' · Morning'}</a></div></div>
+    <label>Patient name</label><input value="${esc(P.name)}" oninput="P.name=this.value" autocomplete="name">
+    <label>Phone number</label><input type="tel" inputmode="tel" value="${esc(P.phone)}" oninput="P.phone=this.value">
+    <label>Patient problem</label><textarea oninput="P.problem=this.value" placeholder="Describe the problem briefly">${esc(P.problem)}</textarea>
+    <button class="btn" style="width:100%;margin-top:16px;padding:14px" onclick="submitBooking()">Confirm booking</button></div>`;
+  }
+  return h;
+}
+function goStep(n){if(n<=3)P.time='';if(n<=2)P.date='';if(n<=1)P.doc='';W.step=n;render();window.scrollTo(0,0)}
+function pickDoc(id){P.doc=id;P.date='';P.time='';W.step=2;render();window.scrollTo(0,0)}
+function pickDate(d){P.date=d;P.time='';W.step=3;render();window.scrollTo(0,0)}
+function pickTime(t){P.time=t;W.step=4;render();window.scrollTo(0,0)}
+async function submitBooking(){
+  const doc=getDoc(P.doc),name=P.name.trim(),phone=normPhone(P.phone),problem=P.problem.trim();
+  if(!name)return toast('Enter patient name');
+  if(!phone)return toast('Enter a valid phone number');
+  if(!problem)return toast('Describe the problem');
+  const s=avail(doc,P.date).find(x=>x.t===P.time);
+  if(!s||s.full||s.past){P.time='';W.step=3;render();return toast('That time is no longer available. Pick another.')}
+  const cnt=B.filter(b=>(b.phone===phone||b.userId===U.id)&&b.date===P.date&&b.status!=='cancelled').length;
+  if(cnt>=S.maxPerPhone)return toast(`Max ${S.maxPerPhone} bookings per day`);
+  const token=B.filter(b=>b.docId===doc.id&&b.date===P.date).length+1;
+  const sk=s.sh==='n'?'Night':'Morning';const b={shift:sk,docId:doc.id,docName:doc.name,date:P.date,time:P.time,name,phone,problem,status:'pending',token,created:Date.now(),userId:U.id,userName:U.username};
+  try{
+    const id=await Store.addBooking(b);
+    P.done={...b,id};P.time='';P.date='';P.problem='';W.step=1;render();window.scrollTo(0,0);
+  }catch(e){toast('Booking failed. Check connection.')}
+}
+
+/* ----- Me ----- */
+function viewMe(){
+  if(W.chat){const cb=B.find(x=>x.id===W.chat);if(cb&&(cb.chatSeenU||0)<(cb.chat||[]).length)Store.updateBooking(cb.id,{chatSeenU:cb.chat.length})}
+  const my=bkOf(U).sort((a,b)=>b.created-a.created),c=s=>my.filter(b=>b.status===s).length;
+  if(U.guest){let g=`<div class="pad" style="margin-top:16px"><h2>Guest mode</h2><p class="sub">Create an account to keep your bookings on any device.</p><div class="row" style="margin-top:12px"><button class="btn" onclick="U=null;W.auth='signup';render()">Sign up</button><button class="btn sec" onclick="U=null;W.auth='login';render()">Log in</button></div></div><div class="pad"><h2>My bookings</h2>`;
+    if(!my.length)g+=`<div class="empty">No bookings yet.</div>`;
+    my.forEach(b=>{g+=`<div class="bk" style="margin-top:10px"><div class="top"><b>#${b.token} · ${esc(b.docName)}</b><span class="tag ${b.status}">${b.status}</span></div><div class="kv"><span>When</span><b>${nice(b.date)} · ${f12(b.time)}${b.shift?' · '+esc(b.shift):''}</b><span>Patient</span><span style="color:inherit">${esc(b.name)}</span></div>${b.status==='pending'?`<div class="acts"><button class="btn red sm" onclick="cancelMine('${b.id}')">Cancel booking</button></div>`:''}</div>`});
+    return g+`</div>`}
+  let h=`<div class="pad" style="margin-top:16px"><div style="display:flex;gap:14px;align-items:center"><span class="av big">${esc(U.username[0].toUpperCase())}</span><div><h2 style="font-size:20px;margin:0">${esc(U.username)}</h2><p class="sub">Member since ${niceDT(U.created)}</p></div></div>
+  <div class="kv"><span>Username</span><b>${esc(U.username)}</b><span>Phone</span><b>${esc(U.phone)}</b><span>Joined</span><b>${niceDT(U.created)}</b></div>
+  <div class="mini"><div><b>${my.length}</b><small>Total</small></div><div><b>${c('pending')+c('confirmed')}</b><small>Upcoming</small></div><div><b>${c('done')}</b><small>Done</small></div><div><b>${c('cancelled')}</b><small>Cancelled</small></div></div></div>`;
+  h+=`<div class="pad"><h2>My bookings</h2>`;
+  if(!my.length)h+=`<div class="empty">No bookings yet. Tap Book to start.</div>`;
+  my.forEach(b=>{h+=`<div class="bk" style="margin-top:10px"><div class="top"><b>#${b.token} · ${esc(b.docName)}</b><span class="tag ${b.status}">${b.status}</span></div>
+    <div class="kv"><span>When</span><b>${nice(b.date)} · ${f12(b.time)}${b.shift?' · '+esc(b.shift):''}</b><span>Patient</span><span style="color:inherit">${esc(b.name)}</span><span>Phone</span><span style="color:inherit">${esc(b.phone)}</span><span>Problem</span><span style="color:inherit">${esc(b.problem)}</span><span>Booked on</span><span style="color:inherit">${niceDT(b.created)}</span></div>
+    <div class="acts"><button class="btn sec sm" onclick="toggleChat('${b.id}')">💬 Chat${unreadU(b)?` <em class="bdg">${unreadU(b)}</em>`:''}</button>${b.status==='pending'?`<button class="btn red sm" onclick="cancelMine('${b.id}')">Cancel booking</button>`:''}</div>${W.chat===b.id?chatHtml(b):''}</div>`});
+  h+=`</div><div class="pad"><h2>Edit account</h2><label>Username</label><input id="m_u" value="${esc(U.username)}" autocapitalize="none"><button class="btn sm" style="margin-top:10px" onclick="saveUsername()">Save username</button>
+  <label style="margin-top:18px">Change password</label><input id="m_o" type="password" placeholder="Current password"><input id="m_n" type="password" placeholder="New password" style="margin-top:8px">
+  <button class="btn sm" style="margin-top:10px" onclick="changePw()">Change password</button></div>
+  <button class="btn red" style="width:100%" onclick="logoutUser()">Log out</button>`;
+  return h;
+}
+function cancelMine(id){if(confirm('Cancel this booking?'))Store.updateBooking(id,{status:'cancelled'})}
+async function saveUsername(){
+  const un=document.getElementById('m_u').value.trim();
+  if(!/^[A-Za-z0-9_.]{3,20}$/.test(un))return toast('Username: 3-20 letters, numbers, _ or .');
+  try{
+    const f=await Store.findByUsername(un.toLowerCase());if(f&&f.id!==U.id)return toast('Username already taken');
+    U={...U,username:un,usernameLower:un.toLowerCase()};await Store.saveUser(U);P.name='';render();toast('Username saved');
+  }catch(e){toast('Could not save')}
+}
+async function changePw(){
+  const o=document.getElementById('m_o').value,n=document.getElementById('m_n').value;
+  if(n.length<4)return toast('New password needs at least 4 characters');
+  try{
+    if(U.passHash!==await hashPw(U.id,o))return toast('Current password is wrong');
+    U={...U,passHash:await hashPw(U.id,n)};await Store.saveUser(U);render();toast('Password changed');
+  }catch(e){toast('Could not save')}
+}
+
+
+
+
+const unreadU=b=>(b.chat||[]).slice(b.chatSeenU||0).filter(m=>m.f==='a').length;
+const msgsHtml=(b,side)=>(b.chat&&b.chat.length)?b.chat.map(m=>`<div class="cm ${m.f===side?'me':'ad'}"><span>${esc(m.t)}</span><small>${new Date(m.at).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):`<div class="empty">No messages yet. Type below to start the chat.</div>`;
+const chatHtml=b=>`<div class="chat"><div class="cmsgs" id="cm-${b.id}">${msgsHtml(b,'u')}</div><div class="crow"><input id="ci-${b.id}" maxlength="500" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChat('${b.id}')"><button class="btn" onclick="sendChat('${b.id}')">Send</button></div></div>`;
+function sendChat(id){const i=document.getElementById('ci-'+id),t=i&&i.value.trim(),b=B.find(x=>x.id===id);if(!t||!b)return;i.value='';const c=[...(b.chat||[]),{f:'u',t,at:Date.now()}];b.chat=c;Store.updateBooking(id,{chat:c,chatSeenU:c.length});const el=document.getElementById('cm-'+id);if(el){el.innerHTML=msgsHtml(b,'u');el.scrollTop=el.scrollHeight}i.focus()}
+function toggleChat(id){W.chat=W.chat===id?'':id;const b=B.find(x=>x.id===id);if(W.chat&&b&&(b.chatSeenU||0)<(b.chat||[]).length)Store.updateBooking(id,{chatSeenU:(b.chat||[]).length});render()}
+function refreshChat(){const id=W.chat,b=id&&B.find(x=>x.id===id),el=b&&document.getElementById('cm-'+id);if(el){el.innerHTML=msgsHtml(b,'u');el.scrollTop=el.scrollHeight}}
+const _render=render;render=function(){_render();document.querySelectorAll('.cmsgs').forEach(e=>e.scrollTop=e.scrollHeight)};
+</script>
+</body>
+</html>
